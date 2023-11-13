@@ -157,29 +157,31 @@ class Booking{
 
   initTables(event){
     const thisBooking = this;
-      
-    if (event && event.target) {
     const clickedTable = event.target.closest('.table');
 
-    if(clickedTable && thisBooking.datePicker && thisBooking.selectedTable){
+    if (clickedTable && thisBooking.datePicker) {
       let tableId = clickedTable.getAttribute(settings.booking.tableIdAttribute);
-
-      if(clickedTable.classList.contains(classNames.booking.tableBooked)){
+  
+      if (clickedTable.classList.contains(classNames.booking.tableBooked)) {
         alert("This table is not available");
       } else {
-        const tableIndex = thisBooking.selectedTable.indexOf(tableId);
+        const isTableSelected = clickedTable.classList.contains(classNames.booking.tableSelected);
   
-        if (tableIndex !== -1) {
-          thisBooking.selectedTable.splice(tableIndex, 1);
+        if (isTableSelected) {
+          thisBooking.selectedTable = null;
           clickedTable.classList.remove(classNames.booking.tableSelected);
         } else {
-          thisBooking.selectedTable.push(tableId);
+          const prevSelectedTable = thisBooking.dom.wrapper.querySelector(`.${classNames.booking.tableSelected}`);
+          if (prevSelectedTable) {
+            prevSelectedTable.classList.remove(classNames.booking.tableSelected);
+          }
+  
+          thisBooking.selectedTable = tableId;
           clickedTable.classList.add(classNames.booking.tableSelected);
         }
       }
     }
   }
-}
 
   resetTables(){
       const thisBooking = this;
@@ -188,7 +190,7 @@ class Booking{
           table.classList.remove(classNames.booking.tableSelected);
       }
 
-      thisBooking.selectedTable = [];
+      thisBooking.selectedTable = null;
   }
 
   render(bookingElem){
@@ -278,20 +280,17 @@ class Booking{
 
     thisBooking.dom.wrapper.addEventListener('updated', function() {
       thisBooking.updateDOM();
+      thisBooking.resetTables();
     });
 
     thisBooking.dom.allTables.addEventListener('click', function(event) {
       thisBooking.initTables(event);
     });
 
-    thisBooking.dom.wrapper.addEventListener('updated', function () {
-      thisBooking.resetTables();
-  });
-
-  thisBooking.dom.form.addEventListener('submit', function(event){
-    event.preventDefault();
-    thisBooking.sendBooking();
-  });
+    thisBooking.dom.form.addEventListener('submit', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
+    });
   }
 
 }
