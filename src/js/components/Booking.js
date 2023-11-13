@@ -231,6 +231,8 @@ class Booking{
   sendBooking(){
     const thisBooking = this;
 
+    const selectedStarters = thisBooking.getSelectedStarters();
+
     const url = settings.db.url + '/' + settings.db.bookings;
 
     const payload = {
@@ -239,7 +241,7 @@ class Booking{
       table: thisBooking.selectedTable,
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
-      starters: thisBooking.getSelectedStarters(),
+      starters: selectedStarters,
       phone: thisBooking.dom.phone.value,
       address: thisBooking.dom.address.value
     }
@@ -261,8 +263,8 @@ class Booking{
           payload.duration,
           payload.table
         );
+        console.log('Rezerwacja udana', payload);
       })
-      console.log('Rezerwacja udana', payload);
   }
 
   initWidgets(){
