@@ -48,7 +48,7 @@ export const select = {
         address: '.order-confirmation [name="address"]',
         bookTable: '.order-confirmation [type="submit"]',
         form: '.booking-form',
-        bookingOptions: '.booking-options',
+        starters: '.booking-options',
       },
       nav: {
         links: '.main-nav a',

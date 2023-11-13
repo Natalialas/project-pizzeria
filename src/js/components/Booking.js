@@ -9,6 +9,7 @@ class Booking{
     const thisBooking = this;
 
     thisBooking.selectedTable = [];
+    thisBooking.selectedStarters = [];
 
     thisBooking.render(bookingElem);
     thisBooking.initWidgets();
@@ -211,7 +212,20 @@ class Booking{
     thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(select.booking.address);
     thisBooking.dom.bookTable = thisBooking.dom.wrapper.querySelector(select.booking.bookTable);
     thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(select.booking.form);
-    thisBooking.dom.bookingOptions = thisBooking.dom.wrapper.querySelector(select.booking.bookingOptions);
+    thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
+  }
+
+  getSelectedStarters() {
+    const thisBooking = this;
+    thisBooking.selectedStarters = [];
+
+    for (const starter of thisBooking.dom.starters) {
+      if (starter.checked) {
+        thisBooking.selectedStarters.push(starter.value);
+      }
+    }
+
+    return thisBooking.selectedStarters;
   }
 
   sendBooking(){
@@ -225,7 +239,7 @@ class Booking{
       table: thisBooking.selectedTable,
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
-      starters: thisBooking.dom.bookingOptions,
+      starters: thisBooking.getSelectedStarters(),
       phone: thisBooking.dom.phone.value,
       address: thisBooking.dom.address.value
     }
@@ -248,7 +262,7 @@ class Booking{
           payload.table
         );
       })
-      console.log('Rezerwacja udana', thisBooking.booked);
+      console.log('Rezerwacja udana', payload);
   }
 
   initWidgets(){
